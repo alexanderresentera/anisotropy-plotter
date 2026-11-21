@@ -7,6 +7,14 @@ ORCID: https://orcid.org/0000-0002-5231-7304 · Contact: r_alex_07@hotmail.com
 
 An offline browser application for visualizing anisotropy from refinements performed in FullProf. This independent application is not an official FullProf product.
 
+## Citation
+
+If you use this software in your research, please cite:
+
+> Resentera, A. (2026). *Anisotropy Plotter (Crystallite Size and Strain)* (Version 1.0.0) [Computer software]. GitHub. https://github.com/alexanderresentera/anisotropy-plotter
+
+Machine-readable metadata are in `CITATION.cff`. No DOI is required or assigned. When citing a published release, also specify its version/tag for reproducibility. The repository link above does not imply that release v1.0.0 has already been published.
+
 ## Download and run
 
 Download `dist/Anisotropy Plotter (Crystallite Size and Strain).html` and open the downloaded file in a desktop browser with WebGL support. No installation or server is needed. Files are processed in the browser; documentation links open online. Viewing the HTML source on GitHub does not launch the app.
@@ -44,14 +52,6 @@ node --test tests/*.test.cjs
 ```
 
 The build embeds the source and bundled Plotly into a standalone HTML. No personal refinement data are bundled. Tests use synthetic grids only.
-
-## Citation
-
-If you use this software in your research, please cite:
-
-> Resentera, A. (2026). *Anisotropy Plotter (Crystallite Size and Strain)* (Version 1.0.0) [Computer software]. GitHub. https://github.com/alexanderresentera/anisotropy-plotter
-
-Machine-readable metadata are in `CITATION.cff`. No DOI is required or assigned. When citing a published release, also specify its version/tag for reproducibility. The repository link above does not imply that release v1.0.0 has already been published.
 
 ## License and acknowledgments
 
