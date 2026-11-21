@@ -47,7 +47,11 @@ The build embeds the source and bundled Plotly into a standalone HTML. No person
 
 ## Citation
 
-Citation metadata are in `CITATION.cff`. A DOI and repository URL have not yet been assigned. Add them after the repository and archival record exist; do not cite a placeholder DOI. Version 1.0.0 is prepared locally but has not yet been published.
+If you use this software in your research, please cite:
+
+> Resentera, A. (2026). *Anisotropy Plotter (Crystallite Size and Strain)* (Version 1.0.0) [Computer software]. GitHub. https://github.com/alexanderresentera/anisotropy-plotter
+
+Machine-readable metadata are in `CITATION.cff`. No DOI is required or assigned. When citing a published release, also specify its version/tag for reproducibility. The repository link above does not imply that release v1.0.0 has already been published.
 
 ## License and acknowledgments
 
