@@ -1,0 +1,80 @@
+<!doctype html>
+<!--
+Copyright (c) 2026 Alexander Resentera.
+SPDX-License-Identifier: GPL-3.0-only
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License version 3
+as published by the Free Software Foundation.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program. If not, see https://www.gnu.org/licenses/.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Anisotropy Plotter (Crystallite Size and Strain)</title>
+<meta name="description" content="Offline directional crystallite size visualization for refinements performed in FullProf.">
+<style>/*__STYLE__*/</style>
+</head>
+<body>
+<header class="header"><div><h1>Anisotropy Plotter (Crystallite Size and Strain)</h1><p>For refinements performed in FullProf</p><p class="credits">Developed by Dr. Alexander Resentera (Universidad Nacional de Cuyo). Built with assistance from OpenAI Codex.</p></div><span class="badge">Local · Offline</span></header>
+<main>
+<section class="intro" aria-labelledby="files-heading"><h2 id="files-heading">Files and calculation</h2><div><p><strong>Required:</strong> <code>.bin</code> or <code>.ggrid</code> (same basename as the SIZ or STR) for the FullProf surface,  <code>.siz</code> for size or <code>.str</code> for strain and <code>.pcr</code> for phase, symmetry and size model. <strong>Optional:</strong> <code>.out</code> and <code>.mic</code> for consistency checks.</p><p class="formula">Read FullProf size grid → extract its half-level surface → show dimensionless grid axes. Read SIZ/MIC independently for physical size metrics. Strain is not a length; STR values are reported separately in their original file convention.</p></div></section>
+<div class="workspace">
+<aside class="controls">
+<section class="card"><div class="section-title"><h2><span class="step">1</span> Load refinement files</h2><button id="clear" class="text-button" type="button">Clear</button></div>
+<label class="dropzone" id="dropzone" for="files"><span class="upload-icon" aria-hidden="true">⇧</span><strong>Drop files or <span class="teal">browse</span></strong><span>Select files from the same refinement together.</span><input id="files" type="file" accept=".siz,.str,.pcr,.out,.mic,.bin,.ggrid" multiple></label>
+<div id="file-list" class="file-list"><div><code>.siz / .str</code><span>Required · size or strain</span></div><div><code>.pcr</code><span>Required · refinement model</span></div><div><code>.out / .mic</code><span>Optional · checks</span></div></div>
+<button id="example" hidden class="text-button example" type="button">Load your SIZ + PCR + BIN/GGRID files</button>
+</section>
+<section class="card"><h2><span class="step">2</span> Representation</h2>
+<div class="field"><label for="dataset">Directional file</label><select id="dataset" disabled><option>Load a .siz or .str file</option></select></div>
+<div class="field"><label for="phase">Phase / pattern</label><select id="phase" disabled><option>Load a .pcr file</option></select></div>
+<div class="field"><span>Size model</span><output id="model">—</output></div><p id="space-group" class="secondary">Detected from your refinement.</p>
+<fieldset class="unit-field"><legend>SIZ / MIC result units</legend><div class="segments"><label><input type="radio" name="unit" value="auto" checked><span>Auto</span></label><label><input type="radio" name="unit" value="A"><span>Å</span></label><label><input type="radio" name="unit" value="nm"><span>nm</span></label><label><input type="radio" name="unit" value="um"><span>µm</span></label></div></fieldset>
+<div class="field"><label for="palette">Color palette</label><select id="palette"><option value="Viridis">Viridis · blue–green–yellow</option><option value="Cividis">Cividis · blue–gold</option><option value="Plasma">Plasma · purple–orange–yellow</option></select></div>
+<button id="generate" class="primary wide" type="button" disabled>Generate plot</button>
+</section>
+<section class="card guide"><h2>How to generate the .siz file</h2><p class="secondary">In the phase block of your PCR:</p>
+<div class="pcr-step"><span class="number">1</span><div><strong>Enable extra phase options</strong><pre>! Nat … Npr  <mark>More</mark>
+  …     …    <mark>1</mark></pre></div></div>
+<div class="pcr-step"><span class="number">2</span><div><strong>Request directional size output</strong><pre>! <mark>Jvi</mark>  Jdi  Hel  Sol …
+  <mark>5</mark>    …    …    …</pre></div></div>
+<div class="pcr-step"><span class="number">3</span><div><strong>Use a compatible size model</strong><pre>! … GauSiz LorSiz <mark>Size-Model</mark>
+  …   …      …    <mark id="guide-model">your model</mark></pre><p id="guide-rule">Keep the model, coefficients and constraints appropriate to your symmetry.</p></div></div>
+<p class="secondary">These are excerpts, not replacement PCR lines. Keep the other fields. Run FullProf again and load the resulting <code>*_size_#.siz</code>.</p>
+<details><summary>Instrumental profile and model notes</summary><p>For the constant-wavelength TCH workflow for compatible refinements, <code>Npr = 7</code> and an instrumental resolution file (<code>Res</code>) are used. The IRF is used by FullProf; it is not recalculated here. Other profiles and TOF workflows must follow their own FullProf settings.</p><p><code>Jvi = 5</code> requests the directional output; it cannot turn a reflection-selective broadening model into a continuous size field. A valid finite <code>.siz</code> remains mandatory.</p><div id="coeff-guide"></div></details>
+<button id="catalog-open" class="text-button" type="button">View all documented size models</button>
+<p class="sources"><a href="https://www2017.ill.eu/sites/fullprof/downloads/Docs/FullProf_Manual.pdf" target="_blank" rel="noreferrer">FullProf manual · lines 19, 36–38</a> · <a href="https://www.ill.eu/sites/fullprof/php/Fullprof_News_2002.htm" target="_blank" rel="noreferrer">Output guide · 14 May 2002</a></p>
+</section>
+</aside>
+<section class="results">
+<div class="card plot-card"><div class="plot-header">
+<div class="plot-heading"><h2>Directional anisotropy</h2><div class="plot-metadata"><p id="plot-subtitle" class="secondary">A centered representation of the directional size field.</p><p id="rietveld-stats" class="rietveld-stats" hidden></p></div></div>
+<div class="plot-controls"><div class="view-buttons" aria-label="Plot view"><button type="button" data-view="3d" class="active" disabled>3D</button><button type="button" data-view="top" disabled>Top</button><button type="button" data-view="side" disabled>Side</button><button type="button" data-view="combined" disabled>Top + Side</button></div><div class="plot-options"><label>Representation <select id="representation"><option value="siz">SIZ radial · r = Dₕ/2 (default)</option><option value="grid">FullProf BIN / GGRID</option></select></label><label>Axes <select id="axis-mode" disabled><option value="physical">Centered grid coordinates</option></select></label></div></div></div>
+<p id="normalization-note" class="secondary" hidden></p><div class="plot-frame" id="plot-frame"><div id="plot" aria-label="Interactive 3D directional size plot"></div><div id="empty"><div class="empty-rings" aria-hidden="true"></div><h3>Your refinement, in three dimensions</h3><p>Load the required files to explore the directional size field.</p><span>True axis proportions · Rotate and zoom · Export offline</span></div></div>
+<div class="figure-note"><span>Figure ratio <strong>9:7</strong> · PNG <strong>12.6 × 9.8 cm</strong> at ≈300 dpi</span><span id="unit-note">Units adapt to your data</span></div>
+<div class="metrics" id="metrics"><div><span>Axial size</span><strong>—</strong></div><div><span>Equatorial mean</span><strong>—</strong></div><div><span>Axial ratio</span><strong>—</strong></div></div>
+<div class="export-row"><p>Apparent coherent-domain representation</p><button type="button" id="export-html" disabled>Export HTML</button><button type="button" id="export-png" class="primary" disabled>Export PNG</button></div>
+<p id="download-status" class="secondary" role="status"></p>
+<aside class="interpretation-note"><strong>Interpretation of the SIZ representation</strong><p>This is a representation of the directional apparent sizes obtained from the refinement, plotted as r = Dₕ/2. It does not establish the physical shape of a crystallite or guarantee that the plotted outer dimensions match those of a real particle.</p><p>FullProf defines the size derived from the integral breadth as follows: <q>gives the volume-averaged apparent size of the crystallites in the direction normal to the scattering planes.</q> <a href="https://www.ill.eu/sites/fullprof/downloads/Docs/Microstructural_effects.pdf" target="_blank" rel="noopener">FullProf microstructure documentation, Eq. (14)</a>.</p><p>The first paragraph explains the interpretation of this app’s radial construction; it is not a verbatim quotation from FullProf.</p></aside><details id="metrics-details"><summary>Directional metrics and interpretation</summary><div id="metrics-table"><p>Metrics become available after a valid plot is generated.</p></div><p>The plot uses the FullProf grid surface. Grid axes are dimensionless and centered on its bounding box. SIZ radial spans and cylindrical estimates are separate results; neither is automatically the physical particle size. Colors indicate radius in grid coordinates, not Dₕ. No ratio uncertainty is inferred without covariances.</p></details>
+</div>
+<section class="card checks"><div class="section-title"><h2>File checks</h2><span id="status-badge" class="badge neutral">Waiting for files</span></div><div id="status" role="status" aria-live="polite"><p class="secondary">Your files stay in this browser. Nothing is uploaded.</p></div></section>
+</section>
+</div>
+<footer>Anisotropy Plotter (Crystallite Size and Strain) · v1.0.0 · For FullProf refinement outputs · <span>No connection required; documentation links open online.</span> · GPL-3.0-only</footer>
+<details class="interpretation-note"><summary>License — GNU GPL version 3</summary><p>Copyright © 2026 Alexander Resentera. No warranty. Source code is supplied with the publication package. Plotly retains its separate MIT license.</p><pre id="license-text" style="white-space:pre-wrap;font-size:12px">/*__LICENSE__*/</pre></details>
+</main>
+<dialog id="catalog"><div class="section-title"><h2>Size-model reference</h2><button id="catalog-close" type="button">Close</button></div><p>All size-model families described in the reference manual are recognized. A finite, complete directional <code>.siz</code> is required for plotting. Reflection-selective models are identified and explained, but do not produce an inferred closed surface.</p><div class="table-scroll"><table><thead><tr><th>Model</th><th>Family / Laue class</th><th>Restrictions and representation</th></tr></thead><tbody id="catalog-body"></tbody></table></div><p class="secondary">The manual contains legacy passages and an ambiguous −14 example. Unsupported or ambiguous combinations stop with an explanation. Full symmetry compatibility is not certified from a space-group name alone.</p></dialog>
+<script id="plotly-library">/*__PLOTLY__*/</script>
+<script>/*__CORE__*/</script>
+<script id="example-data" type="application/json">/*__EXAMPLE__*/</script>
+<script id="presentation-library">/*__PRESENTATION__*/
+/*__GRID__*/</script><script>/*__APP__*/</script>
+</body></html>
