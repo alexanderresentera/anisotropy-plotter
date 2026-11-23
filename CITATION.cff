@@ -10,7 +10,7 @@ authors:
     orcid: "https://orcid.org/0000-0002-5231-7304"
     email: "r_alex_07@hotmail.com"
     affiliation: "Universidad Nacional de Cuyo"
-version: "1.0.0"
+version: "1.0.1"
 license: GPL-3.0-only
 abstract: >-
   Offline browser application for visualizing directional apparent crystallite

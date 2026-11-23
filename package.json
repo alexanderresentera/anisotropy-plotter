@@ -1,6 +1,6 @@
 {
   "name": "anisotropy-plotter",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": true,
   "description": "Offline visualization of FullProf crystallite size and strain anisotropy",
   "scripts": {
