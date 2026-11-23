@@ -1,6 +1,6 @@
 # Anisotropy Plotter (Crystallite Size and Strain)
 
-Developed by **Dr. Alexander Resentera**, Universidad Nacional de Cuyo.
+by **Dr. Alexander Resentera**, Universidad Nacional de Cuyo.
 Built with assistance from **OpenAI Codex**.
 
 ORCID: https://orcid.org/0000-0002-5231-7304 · Contact: r_alex_07@hotmail.com
@@ -59,8 +59,8 @@ Original project code and documentation are licensed under the GNU General Publi
 
 ## References
 
-- [FullProf manual](https://www.ill.eu/sites/fullprof/downloads/Docs/FullProf_Manual.pdf)
-- [FullProf microstructure documentation, including Eq. (14)](https://www.ill.eu/sites/fullprof/downloads/Docs/Microstructural_effects.pdf)
+- [FullProf manual](https://fullprof.gitlab-pages.ill.fr/fullprof/)
+- [FullProf microstructure documentation, including Eq. (14)](https://fullprof.gitlab-pages.ill.fr/fullprof/docs/Microstructural_effects.pdf)
 - Casas-Cabanas et al., *New insights on the microstructural characterisation of nickel hydroxides*, J. Mater. Chem. 16 (2006), 2925–2939. The platelet estimates are conditional model calculations, separate from SIZ contour spans.
 
 FullProf and literature PDFs are linked, not redistributed.
